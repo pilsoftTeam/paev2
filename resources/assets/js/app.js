@@ -16,7 +16,7 @@ import 'element-ui/'
 import ElementUI from 'element-ui';
 Vue.use(ElementUI);
 
-Vue.component('admin', require('./components/admin.vue'));
+Vue.component('admin', require('./components/admin/index.vue'));
 
 const app = new Vue({
     el: '#app'

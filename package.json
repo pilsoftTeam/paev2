@@ -19,5 +19,9 @@
     "style-loader": "^0.13.1",
     "vue": "^2.*",
     "vue-loader": "^11.*"
+  },
+  "dependencies": {
+    "es6-promise": "^4.0.5",
+    "nprogress": "^0.2.0"
   }
 }

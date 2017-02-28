@@ -1,17 +1,21 @@
 <template>
     <div class="container">
-        <div class="row">
+        <div class="row" v-if="!showItemCreation">
             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                <el-menu default-active="1" class="el-menu-vertical-demo">
-                    <el-menu-item index="1">
-                        <i class="el-icon-menu"></i>
-                        Checklists
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                        <i class="el-icon-setting"></i>
-                        Usuarios
-                    </el-menu-item>
-                </el-menu>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <el-menu default-active="1" class="el-menu-vertical-demo">
+                            <el-menu-item index="1">
+                                <i class="el-icon-menu"></i>
+                                Checklists
+                            </el-menu-item>
+                            <el-menu-item index="2">
+                                <i class="el-icon-setting"></i>
+                                Usuarios
+                            </el-menu-item>
+                        </el-menu>
+                    </div>
+                </div>
             </div>
 
             <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 __borderLeft">
@@ -56,6 +60,9 @@
         </div>
 
 
+        <items :selectedChecklist="selectedChecklist" v-if="showItemCreation"></items>
+
+
         <el-dialog title="Agregar un nuevo checklist" v-model="showAddChecklist" size="small">
 
             <div class="row">
@@ -73,7 +80,6 @@
                 <el-button type="primary" @click="submitForm('newChecklistForm')">Agregar</el-button>
             </span>
         </el-dialog>
-
         <el-dialog title="Editar checklist" v-model="showEditChecklist" size="small">
 
             <div class="row">
@@ -107,6 +113,7 @@
     </div>
 </template>
 <script>
+    import items from './modulos/items.vue'
     export default {
         mounted() {
             this.getChecklists();
@@ -122,9 +129,11 @@
                     newChecklistName: ''
                 },
                 checklistDeletionId: '',
+                selectedChecklist: '',
                 showAddChecklist: false,
                 showEditChecklist: false,
                 showDeleteChecklist: false,
+                showItemCreation: false,
                 rules: {
                     newChecklistName: [
                         {required: true, message: 'Por favor escriba algo', trigger: 'blur'},
@@ -202,7 +211,8 @@
 
 
             create(item){
-                console.log(item);
+                this.selectedChecklist = item;
+                this.showItemCreation = true;
             },
 
 
@@ -222,6 +232,8 @@
             }
         },
         computed: {},
-        components: {}
+        components: {
+            'items': items
+        }
     }
 </script>
