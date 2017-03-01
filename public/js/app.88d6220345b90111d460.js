@@ -51533,6 +51533,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = {
     mounted: function mounted() {
@@ -51553,6 +51593,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 nombre: '',
                 idItem: ''
             },
+            newAgrupacion: {
+                nombre: '',
+                idItem: ''
+            },
             selectedItem: '',
             selectedIdforDeletion: '',
             selectedItemForEdition: '',
@@ -51561,6 +51605,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editDialogVisible: false,
             deleteItemDialog: false,
             showEvaluacionesDialog: false,
+            showAgrupacionDialog: false,
             rules: {
                 name: [{ required: true, message: 'Por favor escriba algo', trigger: 'blur' }, {
                     min: 3,
@@ -51599,7 +51644,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.showItems = true;
             this.getEvaluaciones();
         },
-        getEvaluaciones: function getEvaluaciones(id) {
+        getEvaluaciones: function getEvaluaciones() {
             var _this2 = this;
 
             axios.get('api/get/evaluaciones/' + this.selectedItem.id).then(function (r) {
@@ -51679,13 +51724,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (valid) {
                     var data = _this6.newEvaluacion;
                     axios.post('api/create/evaluacion', data).then(function (r) {
-                        console.log(r.data);
                         _this6.showEvaluacionesDialog = false;
-                        //this.editDialogVisible = false;
-                        //this.getItems();
+                        _this6.getEvaluaciones();
                         _this6.success();
                     }).catch(function (e) {
                         _this6.error(e);
+                    });
+                } else {
+                    return false;
+                }
+            });
+        },
+        showDialogAgrupacion: function showDialogAgrupacion(item) {
+            this.showAgrupacionDialog = true;
+            this.newAgrupacion.idItem = item.id;
+        },
+        submitAgrupacionForm: function submitAgrupacionForm(formName) {
+            var _this7 = this;
+
+            this.$refs[formName].validate(function (valid) {
+                if (valid) {
+                    var data = _this7.newAgrupacion;
+                    axios.post('api/create/agrupacion', data).then(function (r) {
+                        _this7.showAgrupacionDialog = false;
+                        _this7.getEvaluaciones();
+                        _this7.success();
+                    }).catch(function (e) {
+                        _this7.error(e);
                     });
                 } else {
                     return false;
@@ -78908,7 +78973,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-heading"
   }, [_c('h5', [_vm._v(_vm._s(_vm.selectedItem.nombre))]), _vm._v(" "), _c('div', {
     staticClass: "btn-group pull-right"
-  }, [_vm._m(0), _vm._v(" "), _c('button', {
+  }, [_c('button', {
+    staticClass: "btn btn-default",
+    attrs: {
+      "type": "button",
+      "title": "Crear una agrupacion para este item"
+    },
+    on: {
+      "click": function($event) {
+        _vm.showDialogAgrupacion(_vm.selectedItem)
+      }
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-cube",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })]), _vm._v(" "), _c('button', {
     staticClass: "btn btn-default",
     attrs: {
       "type": "button",
@@ -78928,7 +79009,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-body"
   }, [_c('br'), _vm._v(" "), _c('div', {
     staticClass: "row"
-  }, [_vm._m(1), _vm._v(" "), _c('div', {
+  }, [_c('div', {
+    staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6"
+  }, [_c('h4', {
+    staticClass: "text-center"
+  }, [_vm._v("Agrupaciones")]), _vm._v(" "), _vm._l((_vm.evaluaciones.agrupaciones), function(agrupacion) {
+    return _c('div', {
+      staticClass: "panel panel-default"
+    }, [_c('div', {
+      staticClass: "panel-heading"
+    }, [_c('h5', [_vm._v(_vm._s(agrupacion.nombre))]), _vm._v(" "), _vm._m(0, true)]), _vm._v(" "), _c('div', {
+      staticClass: "panel-body"
+    }, [_vm._v("\n                                    Panel body ...\n                                ")])])
+  })], 2), _vm._v(" "), _c('div', {
     staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6"
   }, [_c('h4', {
     staticClass: "text-center"
@@ -78941,7 +79034,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       staticStyle: {
         "word-wrap": "break-word"
       }
-    }, [_vm._v(_vm._s(evaluacion.evaluacion))])]), _vm._v(" "), _vm._m(2, true)]), _vm._v(" "), _c('hr')])
+    }, [_vm._v(_vm._s(evaluacion.evaluacion))])]), _vm._v(" "), _vm._m(1, true)]), _vm._v(" "), _c('hr')])
   })], 2)])])])]) : _c('div', {
     staticClass: "col-xs-9 col-sm-9 col-md-9 col-lg-9"
   }, [_c('h4', {
@@ -79135,34 +79228,125 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.submitEvaluacionForm('newEvaluacion')
       }
     }
+  }, [_vm._v("Guardar")])], 1)]), _vm._v(" "), _c('el-dialog', {
+    attrs: {
+      "title": "Eliminar evaluacion",
+      "size": "tiny"
+    },
+    model: {
+      value: (_vm.showDeleteEvaluacionDialog),
+      callback: function($$v) {
+        _vm.showDeleteEvaluacionDialog = $$v
+      }
+    }
+  }, [_c('h4', [_vm._v("Eliminar esta evaluacion")]), _vm._v(" "), _c('p', [_vm._v("¿ Esta seguro que desea eliminar esta evaluación ?")]), _vm._v(" "), _c('span', {
+    staticClass: "dialog-footer",
+    slot: "footer"
+  }, [_c('el-button', {
+    on: {
+      "click": function($event) {
+        _vm.showDeleteEvaluacionDialog = false
+      }
+    }
+  }, [_vm._v("Cancelar")]), _vm._v(" "), _c('el-button', {
+    attrs: {
+      "type": "primary"
+    },
+    on: {
+      "click": function($event) {}
+    }
+  }, [_vm._v("Eliminar")])], 1)]), _vm._v(" "), _c('el-dialog', {
+    attrs: {
+      "title": "Crear nueva agrupacion",
+      "size": "small"
+    },
+    model: {
+      value: (_vm.showAgrupacionDialog),
+      callback: function($$v) {
+        _vm.showAgrupacionDialog = $$v
+      }
+    }
+  }, [_c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-xs-12 col-sm-12 col-md-12 col-lg-12"
+  }, [_c('el-form', {
+    ref: "newAgrupacion",
+    attrs: {
+      "model": _vm.newAgrupacion,
+      "rules": _vm.rules
+    }
+  }, [_c('el-form-item', {
+    attrs: {
+      "label": "Nombre de la agrupación",
+      "prop": "nombre"
+    }
+  }, [_c('el-input', {
+    attrs: {
+      "type": "text"
+    },
+    model: {
+      value: (_vm.newAgrupacion.nombre),
+      callback: function($$v) {
+        _vm.newAgrupacion.nombre = $$v
+      }
+    }
+  })], 1)], 1)], 1)]), _vm._v(" "), _c('span', {
+    staticClass: "dialog-footer",
+    slot: "footer"
+  }, [_c('el-button', {
+    on: {
+      "click": function($event) {
+        _vm.showAgrupacionDialog = false
+      }
+    }
+  }, [_vm._v("Cancelar")]), _vm._v(" "), _c('el-button', {
+    attrs: {
+      "type": "primary"
+    },
+    on: {
+      "click": function($event) {
+        _vm.submitAgrupacionForm('newAgrupacion')
+      }
+    }
   }, [_vm._v("Guardar")])], 1)])], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('button', {
-    staticClass: "btn btn-default",
+  return _c('div', {
+    staticClass: "btn-group pull-right"
+  }, [_c('button', {
+    staticClass: "btn btn-warning btn-xs",
     attrs: {
       "type": "button",
-      "title": "Crear una agrupacion para este item"
+      "title": "Editar esta agrupación"
     }
   }, [_c('i', {
-    staticClass: "fa fa-cube",
+    staticClass: "fa fa-pencil-square-o",
     attrs: {
       "aria-hidden": "true"
     }
-  })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6"
-  }, [_c('h4', {
-    staticClass: "text-center"
-  }, [_vm._v("Agrupaciones")]), _vm._v(" "), _c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-heading"
-  }, [_c('h5', {
-    staticClass: "panel-title"
-  }, [_vm._v("AAAAA")])]), _vm._v(" "), _c('div', {
-    staticClass: "panel-body"
-  }, [_vm._v("\n                                    Panel body ...\n                                ")])])])
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-danger btn-xs",
+    attrs: {
+      "type": "button",
+      "title": "Eliminar esta agrupación"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-trash",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })]), _vm._v(" "), _c('button', {
+    staticClass: "btn btn-info btn-xs",
+    attrs: {
+      "type": "button",
+      "title": "Agregar una evaluación a esta agrupación"
+    }
+  }, [_c('i', {
+    staticClass: "fa fa-check",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })])])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "col-xs-3 col-sm-3 col-md-3 col-lg-3"

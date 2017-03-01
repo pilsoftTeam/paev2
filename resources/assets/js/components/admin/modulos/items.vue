@@ -55,6 +55,7 @@
                         <h5>{{selectedItem.nombre}}</h5>
                         <div class="btn-group pull-right">
                             <button type="button"
+                                    @click="showDialogAgrupacion(selectedItem)"
                                     class="btn btn-default"
                                     title="Crear una agrupacion para este item">
                                 <i class="fa fa-cube" aria-hidden="true"></i>
@@ -72,9 +73,23 @@
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                 <h4 class="text-center">Agrupaciones</h4>
-                                <div class="panel panel-default">
+                                <div class="panel panel-default" v-for="agrupacion in evaluaciones.agrupaciones">
                                     <div class="panel-heading">
-                                        <h5 class="panel-title">AAAAA</h5>
+                                        <h5>{{agrupacion.nombre}}</h5>
+                                        <div class="btn-group pull-right">
+                                            <button type="button" class="btn btn-warning btn-xs"
+                                                    title="Editar esta agrupación">
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                    title="Eliminar esta agrupación">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-info btn-xs"
+                                                    title="Agregar una evaluación a esta agrupación">
+                                                <i class="fa fa-check" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="panel-body">
                                         Panel body ...
@@ -160,7 +175,6 @@
             </span>
         </el-dialog>
 
-
         <el-dialog title="Crear nueva evaluacion" v-model="showEvaluacionesDialog" size="small">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -174,6 +188,32 @@
             <span slot="footer" class="dialog-footer">
                 <el-button @click="showEvaluacionesDialog = false">Cancelar</el-button>
                  <el-button type="primary" @click="submitEvaluacionForm('newEvaluacion')">Guardar</el-button>
+          </span>
+        </el-dialog>
+
+        <el-dialog title="Eliminar evaluacion" v-model="showDeleteEvaluacionDialog" size="tiny">
+            <h4>Eliminar esta evaluacion</h4>
+            <p>¿ Esta seguro que desea eliminar esta evaluación ?</p>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="showDeleteEvaluacionDialog = false">Cancelar</el-button>
+                 <el-button type="primary" @click="">Eliminar</el-button>
+          </span>
+        </el-dialog>
+
+
+        <el-dialog title="Crear nueva agrupacion" v-model="showAgrupacionDialog" size="small">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <el-form :model="newAgrupacion" :rules="rules" ref="newAgrupacion">
+                        <el-form-item label="Nombre de la agrupación" prop="nombre">
+                            <el-input type="text" v-model="newAgrupacion.nombre"></el-input>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="showAgrupacionDialog = false">Cancelar</el-button>
+                 <el-button type="primary" @click="submitAgrupacionForm('newAgrupacion')">Guardar</el-button>
           </span>
         </el-dialog>
 
@@ -200,6 +240,10 @@
                     nombre: '',
                     idItem: '',
                 },
+                newAgrupacion: {
+                    nombre: '',
+                    idItem: ''
+                },
                 selectedItem: '',
                 selectedIdforDeletion: '',
                 selectedItemForEdition: '',
@@ -208,6 +252,7 @@
                 editDialogVisible: false,
                 deleteItemDialog: false,
                 showEvaluacionesDialog: false,
+                showAgrupacionDialog: false,
                 rules: {
                     name: [
                         {required: true, message: 'Por favor escriba algo', trigger: 'blur'},
@@ -251,7 +296,7 @@
             },
 
 
-            getEvaluaciones(id){
+            getEvaluaciones(){
                 axios.get('api/get/evaluaciones/' + this.selectedItem.id).then(r => {
                     this.evaluaciones.agrupaciones = r.data.agrupaciones;
                     this.evaluaciones.evaluaciones = r.data.evaluaciones;
@@ -314,22 +359,37 @@
                     this.error(e);
                 })
             },
-
-
             showDialogEvaluacion(item){
                 this.showEvaluacionesDialog = true;
                 this.newEvaluacion.idItem = item.id;
             },
-
             submitEvaluacionForm(formName){
                 this.$refs[formName].validate(valid => {
                     if (valid) {
                         let data = this.newEvaluacion;
                         axios.post('api/create/evaluacion', data).then(r => {
-                            console.log(r.data);
                             this.showEvaluacionesDialog = false;
-                            //this.editDialogVisible = false;
-                            //this.getItems();
+                            this.getEvaluaciones();
+                            this.success();
+                        }).catch(e => {
+                            this.error(e);
+                        })
+                    } else {
+                        return false;
+                    }
+                })
+            },
+            showDialogAgrupacion(item){
+                this.showAgrupacionDialog = true;
+                this.newAgrupacion.idItem = item.id;
+            },
+            submitAgrupacionForm(formName){
+                this.$refs[formName].validate(valid => {
+                    if (valid) {
+                        let data = this.newAgrupacion;
+                        axios.post('api/create/agrupacion', data).then(r => {
+                            this.showAgrupacionDialog = false;
+                            this.getEvaluaciones();
                             this.success();
                         }).catch(e => {
                             this.error(e);

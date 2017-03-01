@@ -25,8 +25,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('/edit/item', 'ItemsController@edit');
     Route::delete('/delete/item/{id}', 'ItemsController@delete');
 
+
     //Evaluaciones
     Route::get('/get/evaluaciones/{id}', 'EvaluacionesController@getEvaluaciones');
     Route::post('/create/evaluacion', 'EvaluacionesController@createWithoutAgrupacion');
 
+
+    //Agrupaciones
+    Route::post('/create/agrupacion', 'AgrupacionesController@create');
 });

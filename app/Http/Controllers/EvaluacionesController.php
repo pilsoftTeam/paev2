@@ -11,7 +11,7 @@ class EvaluacionesController extends Controller
     public function getEvaluaciones($id)
     {
         $data = [
-            'evaluaciones' => Evaluaciones::where('idItem', $id)->get(),
+            'evaluaciones' => Evaluaciones::where('idItem', $id)->where('idAgrupacion', null)->get(),
             'agrupaciones' => Agrupaciones::where('idItem', $id)->with('getEvaluaciones')->get()
         ];
 
