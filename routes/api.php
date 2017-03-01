@@ -1,7 +1,4 @@
 <?php
-
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,9 +13,15 @@ use Illuminate\Http\Request;
 Route::group(['middleware' => 'auth:api'], function () {
 
     //Checklists
-    Route::get('/get/checklists', 'checklistController@index');
-    Route::post('/create/checklist', 'checklistController@create');
-    Route::put('/edit/checklist', 'checklistController@edit');
-    Route::delete('/delete/checklist/{id}', 'checklistController@delete');
+    Route::get('/get/checklists', 'ChecklistController@index');
+    Route::post('/create/checklist', 'ChecklistController@create');
+    Route::put('/edit/checklist', 'ChecklistController@edit');
+    Route::delete('/delete/checklist/{id}', 'ChecklistController@delete');
+
+
+    //Items
+    Route::get('/get/items/{id}', 'ItemsController@index');
+    Route::post('/create/item', 'ItemsController@create');
+    Route::delete('/delete/item/{id}', 'ItemsController@delete');
 
 });

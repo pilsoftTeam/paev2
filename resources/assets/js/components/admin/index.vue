@@ -27,7 +27,7 @@
                                     <img src="http://placehold.it/350x150" class="image">
                                     <div>
                                         <hr>
-                                        <span @click="editChecklist(item)">
+                                        <span @dblclick="editChecklist(item)">
                                             {{item.nombre}}
                                         </span>
                                         <br>
@@ -97,7 +97,7 @@
                 <el-button type="primary" @click="submitEditForm('newChecklistForm')">Editar</el-button>
             </span>
         </el-dialog>
-        <el-dialog title="Eliminar checklist" v-model="showDeleteChecklist" size="small">
+        <el-dialog title="Eliminar checklist" v-model="showDeleteChecklist" size="tiny">
 
             <h3>Atencion!</h3>
             <p>Si usted elimina este checklist todas las evaluaciones se perderan. Se recomienda exportar la informacion
@@ -196,7 +196,7 @@
                 this.showEditChecklist = true;
             },
             showDeleteDialog(id){
-                this.showDeleteChecklist = true
+                this.showDeleteChecklist = true;
                 this.checklistDeletionId = id;
             },
             deleteChecklist(){

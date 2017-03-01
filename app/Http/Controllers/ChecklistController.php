@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Checklists;
 use Illuminate\Http\Request;
 
-class checklistController extends Controller
+class ChecklistController extends Controller
 {
     public function index()
     {
@@ -28,7 +28,6 @@ class checklistController extends Controller
         Checklists::where('id', $request->id)->update([
             'nombre' => $request->newChecklistName
         ]);
-
         return response()->json(200);
     }
 
