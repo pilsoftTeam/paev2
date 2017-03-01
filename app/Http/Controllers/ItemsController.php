@@ -23,6 +23,15 @@ class ItemsController extends Controller
         return response()->json(200);
     }
 
+    public function edit(Request $request)
+    {
+        Items::where('id', $request->id)->update([
+            'nombre' => $request->nombre
+        ]);
+
+        return response()->json(200);
+    }
+
     public function delete($id)
     {
         Items::destroy($id);

@@ -17,11 +17,9 @@ class CreateEvaluacionesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('idItem');
             $table->foreign('idItem')->references('id')->on('items');
-
             $table->unsignedInteger('idAgrupacion')->nullable();
+            $table->longText('evaluacion');
             $table->foreign('idAgrupacion')->references('id')->on('agrupaciones');
-
-
 
 
             $table->timestamps();

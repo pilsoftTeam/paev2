@@ -12,9 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (!Auth::User()) {
+        return view('auth.login');
+    }
+    return view('inicio');
 });
-
 Auth::routes();
-
 Route::get('/inicio', 'HomeController@index');
