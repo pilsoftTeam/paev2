@@ -18,6 +18,7 @@ class CreateAgrupacionesTable extends Migration
             $table->unsignedInteger('idItem');
             $table->foreign('idItem')->references('id')->on('items');
             $table->longText('nombre');
+            $table->boolean('estado')->default(true);
             $table->timestamps();
         });
     }

@@ -10,7 +10,7 @@ class ItemsController extends Controller
 
     public function index($id)
     {
-        $items = Items::where('idChecklist', $id)->get();
+        $items = Items::where('idChecklist', $id)->where('estado', true)->get();
         return response()->json($items, 200);
     }
 
@@ -34,7 +34,9 @@ class ItemsController extends Controller
 
     public function delete($id)
     {
-        Items::destroy($id);
+        Items::where('id', $id)->update([
+            'estado' => false
+        ]);
         return response()->json(200);
     }
 }

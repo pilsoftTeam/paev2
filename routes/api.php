@@ -28,9 +28,15 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //Evaluaciones
     Route::get('/get/evaluaciones/{id}', 'EvaluacionesController@getEvaluaciones');
-    Route::post('/create/evaluacion', 'EvaluacionesController@createWithoutAgrupacion');
+    Route::post('/create/evaluacion', 'EvaluacionesController@create');
+    Route::put('/edit/evaluacion', 'EvaluacionesController@editEvaluacion');
+    Route::delete('/delete/evaluacion/{id}', 'EvaluacionesController@deleteEvaluacion');
+    //Evaluaciones Creator
+    Route::get('/get/evaluacion/info/{id}', 'EvaluacionesController@getInfo');
 
 
     //Agrupaciones
     Route::post('/create/agrupacion', 'AgrupacionesController@create');
+    Route::put('/edit/agrupacion', 'AgrupacionesController@edit');
+    Route::delete('/delete/agrupacion/{id}', 'AgrupacionesController@delete');
 });

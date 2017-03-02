@@ -20,6 +20,7 @@ class CreateEvaluacionesTable extends Migration
             $table->unsignedInteger('idAgrupacion')->nullable();
             $table->longText('evaluacion');
             $table->foreign('idAgrupacion')->references('id')->on('agrupaciones');
+            $table->boolean('estado')->default(true);
             $table->timestamps();
         });
     }

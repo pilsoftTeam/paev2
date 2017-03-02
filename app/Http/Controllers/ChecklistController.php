@@ -9,7 +9,7 @@ class ChecklistController extends Controller
 {
     public function index()
     {
-        $checklist = Checklists::all();
+        $checklist = Checklists::where('estado', true)->get();
 
         return response()->json($checklist, 200);
     }
@@ -33,7 +33,9 @@ class ChecklistController extends Controller
 
     public function delete($id)
     {
-        Checklists::destroy($id);
+        Checklists::where('id', $id)->update([
+            'estado' => false
+        ]);
         return response()->json(200);
     }
 }
