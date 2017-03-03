@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/create/evaluacion', 'EvaluacionesController@create');
     Route::put('/edit/evaluacion', 'EvaluacionesController@editEvaluacion');
     Route::delete('/delete/evaluacion/{id}', 'EvaluacionesController@deleteEvaluacion');
+
     //Evaluaciones Creator
     Route::get('/get/evaluacion/info/{id}', 'EvaluacionesController@getInfo');
 

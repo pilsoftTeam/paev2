@@ -44,7 +44,7 @@
         methods: {
             init(){
                 axios.get('api/get/evaluacion/info/' + this.info.id).then(r => {
-                    console.log(r.data);
+                    //console.log(r.data);
                 }).catch(e => {
                     console.log(e);
                 })

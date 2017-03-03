@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Agrupaciones;
 use App\Evaluaciones;
+use App\Prueba;
 use Illuminate\Http\Request;
 
 class EvaluacionesController extends Controller
 {
     public function getEvaluaciones($id)
     {
+
         $data = [
             'evaluaciones' => Evaluaciones::where('idItem', $id)->where('idAgrupacion', null)->where('estado', true)->get(),
             'agrupaciones' => Agrupaciones::where('idItem', $id)->with('getEvaluaciones')->where('estado', true)->get()

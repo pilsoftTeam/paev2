@@ -21,6 +21,15 @@ class CreateEvaluacionesTable extends Migration
             $table->longText('evaluacion');
             $table->foreign('idAgrupacion')->references('id')->on('agrupaciones');
             $table->boolean('estado')->default(true);
+            $table->enum('tipo', ['texto', 'numero', 'fecha', 'hora', 'seleccionUnica', 'seleccionMultiple'])->nullable();
+            $table->string('criticidad')->nullable();
+            $table->longText('documentosVerificadores')->nullable();
+            $table->longText('aspectoEvaluativo')->nullable();
+            $table->boolean('observacionEscrita')->default(false);
+            $table->boolean('observacionDocumental')->default(false);
+            $table->boolean('replicable')->default(false);
+            $table->unsignedInteger('idCumplimiento')->nullable();
+            $table->foreign('idCumplimiento')->references('id')->on('cumplimientos');
             $table->timestamps();
         });
     }
