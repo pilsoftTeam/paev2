@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Agrupaciones;
+use App\Cumplimientos;
 use App\Evaluaciones;
+use App\OpcionesCumplimiento;
 use App\Prueba;
 use Illuminate\Http\Request;
 
@@ -55,5 +57,46 @@ class EvaluacionesController extends Controller
         $info = Evaluaciones::where('id', $id)->get();
 
         return response()->json($info, 200);
+    }
+
+    public function getOpcionesCumplimiento()
+    {
+        $opciones = Cumplimientos::with('getOpcionesCumplimientos')->get();
+
+        return response()->json($opciones, 200);
+    }
+
+    public function saveCumplimiento(Request $request)
+    {
+
+        $cumplimiento = new Cumplimientos();
+        $cumplimiento->nombreCumplimiento = $request->titulo;
+        $cumplimiento->save();
+        $idCumplimiento = $cumplimiento->id;
+        foreach ($request->opciones as $opcion) {
+            $opcionesCumplimiento = new OpcionesCumplimiento();
+            $opcionesCumplimiento->idCumplimiento = $idCumplimiento;
+            $opcionesCumplimiento->titulo = $opcion['nombre'];
+            $opcionesCumplimiento->valor = $opcion['valor'];
+            $opcionesCumplimiento->save();
+        }
+        return response()->json(200);
+    }
+
+    public function deleteCumplimiento($id)
+    {
+        OpcionesCumplimiento::where('idCumplimiento', $id)->delete();
+        Cumplimientos::destroy($id);
+
+        return response()->json(200);
+    }
+
+    public function setCumplimientoEvaluacion(Request $request)
+    {
+        Evaluaciones::where('id', $request->evaluacion)->update([
+            'idCumplimiento' => $request->cumplimiento
+        ]);
+
+        return response()->json(200);
     }
 }

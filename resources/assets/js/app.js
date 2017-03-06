@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -14,6 +13,12 @@ require('./bootstrap');
  */
 import 'element-ui/'
 import ElementUI from 'element-ui';
+
+import lang from 'element-ui/lib/locale/lang/es'
+import locale from 'element-ui/lib/locale'
+
+// configurar lenguaje
+locale.use(lang);
 Vue.use(ElementUI);
 
 Vue.component('admin', require('./components/admin/index.vue'));

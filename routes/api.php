@@ -34,6 +34,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //Evaluaciones Creator
     Route::get('/get/evaluacion/info/{id}', 'EvaluacionesController@getInfo');
+    Route::get('/get/opciones/cumplimiento', 'EvaluacionesController@getOpcionesCumplimiento');
+
+    Route::post('/save/cumplimiento', 'EvaluacionesController@saveCumplimiento');
+    Route::put('/set/opcion', 'EvaluacionesController@setCumplimientoEvaluacion');
+    Route::delete('/delete/cumplimiento/{id}', 'EvaluacionesController@deleteCumplimiento');
 
 
     //Agrupaciones
