@@ -52522,14 +52522,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.data.observacionDocumental == 0 ? this.data.observacionDocumental = false : this.data.observacionDocumental = true;
             this.data.replicable == 0 ? this.data.replicable = false : this.data.replicable = true;
         },
+        afterUpdate: function afterUpdate() {
+            var _this = this;
+
+            axios.get('api/get/evaluacion/info/' + this.data.id).then(function (r) {
+                //this.data = r.data;
+                //console.log(this.data);
+                //console.log(r.data);
+                _this.data.cumplimiento = r.data[0].get_cumplimientos;
+
+                console.log(_this.data);
+            }).catch(function (e) {
+                console.log(e);
+            });
+        },
         assignInput: function assignInput(type) {
             this.data.tipo = type;
         },
         getOptions: function getOptions() {
-            var _this = this;
+            var _this2 = this;
 
             axios.get('api/get/opciones/cumplimiento').then(function (r) {
-                _this.opcionesCumplimiento = r.data;
+                _this2.opcionesCumplimiento = r.data;
             }).catch(function (e) {
                 console.log(e);
             });
@@ -52542,21 +52556,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.formCumplimiento.opciones.push(obj);
         },
         saveOption: function saveOption(formName) {
-            var _this2 = this;
+            var _this3 = this;
 
             this.$refs[formName].validate(function (valid) {
                 if (valid) {
-                    var data = _this2.formCumplimiento;
+                    var data = _this3.formCumplimiento;
                     axios.post('api/save/cumplimiento', data).then(function (r) {
                         var obj = {
                             nombre: '',
                             valor: ''
                         };
-                        _this2.formCumplimiento.titulo = '';
-                        _this2.formCumplimiento.opciones.length = 0;
-                        _this2.formCumplimiento.opciones.push(obj);
-                        _this2.activeNameForCumplimiento = 'uno';
-                        _this2.getOptions();
+                        _this3.formCumplimiento.titulo = '';
+                        _this3.formCumplimiento.opciones.length = 0;
+                        _this3.formCumplimiento.opciones.push(obj);
+                        _this3.activeNameForCumplimiento = 'uno';
+                        _this3.getOptions();
                     }).catch(function (e) {
                         console.log(e);
                     });
@@ -52576,17 +52590,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.deleteFrameData = item.id;
         },
         deleteCumplimiento: function deleteCumplimiento() {
-            var _this3 = this;
+            var _this4 = this;
 
             axios.delete('api/delete/cumplimiento/' + this.deleteFrameData).then(function (r) {
-                _this3.showDeleteFrame = false;
-                _this3.getOptions();
+                _this4.showDeleteFrame = false;
+                _this4.getOptions();
             }).catch(function (e) {
                 console.log(e);
             });
         },
         setOpcion: function setOpcion(row, item) {
-            var _this4 = this;
+            var _this5 = this;
 
             var formData = {
                 evaluacion: this.data.id,
@@ -52594,10 +52608,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             axios.put('api/set/opcion', formData).then(function (r) {
-                _this4.opcionesCumplimientoDialogVisible = false;
-                _this4.success();
+                _this5.opcionesCumplimientoDialogVisible = false;
+                _this5.success();
+                _this5.afterUpdate();
             }).catch(function (e) {
-                _this4.error(e);
+                _this5.error(e);
             });
         },
         success: function success() {
@@ -79991,9 +80006,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "width": "99%"
     },
     attrs: {
-      "placeholder": "Select"
+      "placeholder": "Seleccionar"
     }
   }, [_c('el-option', {
+    attrs: {
+      "label": "-- Seleccione Uno --",
+      "value": ""
+    }
+  }), _vm._v(" "), _c('el-option', {
     attrs: {
       "label": "opt",
       "value": "opt"

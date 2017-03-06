@@ -149,9 +149,9 @@
 
                                 <div class="row" v-if="data.tipo === 'seleccionUnica'">
                                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                                        <el-select style="width: 99%"
-                                                   placeholder="Select">
-                                            <el-option label="opt" value="opt"></el-option>
+                                        <el-select style="width: 99%" placeholder="Seleccionar">
+                                            <el-option label="-- Seleccione Uno --" value=""></el-option>
+                                            <el-option v-for="" label="opt" value="opt"></el-option>
                                         </el-select>
                                     </div>
                                     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
@@ -461,6 +461,18 @@
                 this.data.observacionDocumental == 0 ? this.data.observacionDocumental = false : this.data.observacionDocumental = true;
                 this.data.replicable == 0 ? this.data.replicable = false : this.data.replicable = true;
             },
+            afterUpdate(){
+                axios.get('api/get/evaluacion/info/' + this.data.id).then(r => {
+                    //this.data = r.data;
+                    //console.log(this.data);
+                    //console.log(r.data);
+                    this.data.cumplimiento = r.data[0].get_cumplimientos;
+
+                    console.log(this.data);
+                }).catch(e => {
+                    console.log(e);
+                })
+            },
             assignInput(type){
                 this.data.tipo = type;
             },
@@ -532,6 +544,7 @@
                 axios.put('api/set/opcion', formData).then(r => {
                     this.opcionesCumplimientoDialogVisible = false;
                     this.success();
+                    this.afterUpdate();
                 }).catch(e => {
                     this.error(e);
                 })

@@ -54,7 +54,7 @@ class EvaluacionesController extends Controller
 
     public function getInfo($id)
     {
-        $info = Evaluaciones::where('id', $id)->get();
+        $info = Evaluaciones::where('id', $id)->with('getCumplimientos')->get();
 
         return response()->json($info, 200);
     }
