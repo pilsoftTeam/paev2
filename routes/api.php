@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('/save/cumplimiento', 'EvaluacionesController@saveCumplimiento');
     Route::put('/set/opcion', 'EvaluacionesController@setCumplimientoEvaluacion');
+    Route::put('/update/evaluacion', 'EvaluacionesController@editEvaluacionFromEditor');
     Route::delete('/delete/cumplimiento/{id}', 'EvaluacionesController@deleteCumplimiento');
 
 

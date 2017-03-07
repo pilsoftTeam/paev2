@@ -15,7 +15,7 @@ class EvaluacionesController extends Controller
     {
 
         $data = [
-            'evaluaciones' => Evaluaciones::where('idItem', $id)->where('idAgrupacion', null)->where('estado', true)->get(),
+            'evaluaciones' => Evaluaciones::where('idItem', $id)->where('idAgrupacion', null)->where('estado', true)->with('getCumplimientos')->get(),
             'agrupaciones' => Agrupaciones::where('idItem', $id)->with('getEvaluaciones')->where('estado', true)->get()
         ];
 
@@ -97,6 +97,19 @@ class EvaluacionesController extends Controller
             'idCumplimiento' => $request->cumplimiento
         ]);
 
+        return response()->json(200);
+    }
+
+    public function editEvaluacionFromEditor(Request $request)
+    {
+        Evaluaciones::where('id', $request->id)->update([
+            'criticidad' => $request->criticidad,
+            'documentosVerificadores' => $request->documentosVerificadores,
+            'aspectoEvaluativo' => $request->aspectoEvaluativo,
+            'observacionDocumental' => $request->observacionDocumental,
+            'observacionEscrita' => $request->observacionEscrita,
+            'replicable' => $request->replicable
+        ]);
         return response()->json(200);
     }
 }

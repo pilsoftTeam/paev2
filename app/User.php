@@ -16,6 +16,11 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    public function getRol(){
+        return $this->hasOne('App\Perfiles', 'idUsuario', 'id');
+    }
+
     protected $fillable = [
         'name', 'email', 'password',
     ];

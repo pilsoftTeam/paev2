@@ -10,6 +10,6 @@ class Agrupaciones extends Model
 
     public function getEvaluaciones()
     {
-        return $this->hasMany('App\Evaluaciones', 'idAgrupacion', 'id')->where('estado', true);
+        return $this->hasMany('App\Evaluaciones', 'idAgrupacion', 'id')->where('estado', true)->with('getCumplimientos');
     }
 }

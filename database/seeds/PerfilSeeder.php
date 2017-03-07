@@ -53,8 +53,8 @@ class PerfilSeeder extends Seeder
 
         DB::table('usuarios')->insert([
             'name' => 'Revisor',
-            'email' => 'revisor@pae.cl',
-            'password' => bcrypt('revisor'),
+            'email' => 'supervisor@pae.cl',
+            'password' => bcrypt('supervisor'),
         ]);
 
         DB::table('perfiles')->insert([

@@ -66,7 +66,7 @@
                                     <el-input v-model="data.documentosVerificadores"
                                               :rows="2"
                                               type="textarea"
-                                              placeholder="Opcional">
+                                              placeholder="Separe cada uno de los documentos requeridos con una coma ´,´ ">
                                     </el-input>
                                 </el-form-item>
 
@@ -123,25 +123,33 @@
                     <h5>Previsualización</h5>
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <h6>{{data.evaluacion}}</h6>
+
+                            <h5 class="col-xs-10 col-sm-10 col-md-10 col-lg-10" style="word-wrap: break-word">
+                                Evaluacion : <b>{{data.evaluacion}}</b>
+                            </h5>
+                            <h5 class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="word-wrap: break-word">
+                                Criticidad : <b>{{data.criticidad}}</b>
+                            </h5>
                             <div>
                                 <el-input v-if="data.tipo === 'texto'"
+                                          v-model="placeholders.texto"
                                           placeholder="Escriba algo">
                                 </el-input>
 
                                 <el-input-number v-if="data.tipo === 'numero'"
+                                                 v-model="placeholders.numero"
                                                  style="width: 99%">
                                 </el-input-number>
 
                                 <el-date-picker
                                         v-if="data.tipo === 'fecha'"
+                                        v-model="placeholders.fecha"
                                         style="width: 99%"
-                                        type="week"
-                                        format="Week WW"
                                         placeholder="Elija una fecha">
                                 </el-date-picker>
 
                                 <el-time-picker v-if="data.tipo === 'hora'"
+                                                v-model="placeholders.hora"
                                                 style="width: 99%"
                                                 :picker-options="{selectableRange: '00:00:00 - 24:00:00'}"
                                                 placeholder="Elija la hora">
@@ -149,28 +157,51 @@
 
                                 <div class="row" v-if="data.tipo === 'seleccionUnica'">
                                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
-                                        <el-select style="width: 99%" placeholder="Seleccionar">
-                                            <el-option label="-- Seleccione Uno --" value=""></el-option>
-                                            <el-option v-for="" label="opt" value="opt"></el-option>
+                                        <el-select style="width: 99%" v-model="placeholders.seleccionUnica"
+                                                   placeholder="Seleccionar">
+                                            <el-option
+                                                    v-for="opciones in data.get_cumplimientos.get_opciones_cumplimientos"
+                                                    :key="opciones.id"
+                                                    :value="opciones.valor"
+                                                    :label="opciones.titulo">
+                                            </el-option>
                                         </el-select>
                                     </div>
                                     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
 
-                                        <button class="btn btn-block btn-xs btn-success"
+                                        <el-button
+                                                size="mini"
+                                                type="success"
                                                 @click="opcionesCumplimientoDialogVisible = true"
                                                 title="Agregar una opcion de cumplimiento a la evaluacion">
-                                            <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                        </button>
+                                            <i class="fa fa-angle-down fa-2x" aria-hidden="true"></i>
+                                        </el-button>
                                     </div>
+
+                                    <br>
+                                    <br>
+                                    <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11"
+                                         v-if="placeholders.seleccionUnica">
+                                        <h5>Opcion elegida : <b>{{placeholders.seleccionUnica}}</b></h5>
+                                    </div>
+                                    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" v-if="placeholders.seleccionUnica">
+                                        <el-button type="primary"
+                                                   size="mini"
+                                                   title="¿ Esta opcion desencadena otra pregunta ?">
+                                            <i class="fa fa-question fa-2x" aria-hidden="true"></i>
+                                        </el-button>
+                                    </div>
+
+
                                 </div>
 
                                 <div class="row" v-if="data.tipo === 'seleccionMultiple'">
                                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                                         <el-select
-                                                v-model="value5"
+                                                v-model="placeholders.seleccionMultiple"
                                                 style="width: 99%"
                                                 multiple
-                                                placeholder="Select">
+                                                placeholder="Seleccion múltiple">
                                             <el-option
                                                     v-for="item in options"
                                                     :key="item.value"
@@ -199,11 +230,38 @@
                                                 title="Subir adjuntos / Aspectos evaluativos , Documentos requeridos"
                                                 name="1">
                                             <div class="row">
-                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad
-                                                    assumenda aut distinctio earum ipsum itaque, nesciunt nulla quasi
-                                                    quis quo recusandae repellat repellendus sequi suscipit unde!
-                                                    Deleniti modi officiis tempora?
+                                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                                                     v-if="data.aspectoEvaluativo">
+                                                    <h5 class="text-center">Aspecto Evaluativo</h5>
+                                                    <p style="word-wrap: break-word">{{data.aspectoEvaluativo}}</p>
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                                                     v-if="data.documentosVerificadores">
+                                                    <h5 class="text-center">Documentos verificadores</h5>
+                                                    <p style="word-wrap: break-word">
+                                                        {{data.documentosVerificadores}}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                                                     v-if="data.observacionEscrita">
+                                                    <h5 class="text-center">Observacion Escrita</h5>
+                                                    <el-input type="textarea"></el-input>
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+                                                     v-if="data.observacionDocumental">
+                                                    <h5 class="text-center">Observacion documental</h5>
+                                                    <el-upload
+                                                            class="upload-demo"
+                                                            :drag="true" l
+                                                            action="//jsonplaceholder.typicode.com/posts/"
+                                                            :mutiple="true">
+                                                        <i class="el-icon-upload"></i>
+                                                        <div class="el-upload__text">Suelte archivos aqui o <em>haga
+                                                            click para subir</em></div>
+                                                    </el-upload>
                                                 </div>
                                             </div>
                                         </el-collapse-item>
@@ -214,6 +272,18 @@
                     </div>
                 </div>
             </div>
+            <br>
+            <br>
+
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                <el-button class="btn-block" type="success" @click="saveEvaluacion">
+                    Guardar cambios
+                </el-button>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div>
+
+
         </div>
 
 
@@ -381,6 +451,15 @@
 
     </div>
 </template>
+<style>
+    .el-upload__input {
+        display: none !important;
+    }
+
+    .el-upload-dragger {
+        width: 315px !important;
+    }
+</style>
 <script>
     export default {
         mounted(){
@@ -413,6 +492,18 @@
                         }
                     ]
                 },
+
+
+                placeholders: {
+                    texto: '',
+                    numero: '',
+                    fecha: '',
+                    hora: '',
+                    seleccionUnica: '',
+                    seleccionMultiple: []
+
+                },
+
 
                 options: [
                     {
@@ -460,18 +551,14 @@
                 this.data.observacionEscrita == 0 ? this.data.observacionEscrita = false : this.data.observacionEscrita = true;
                 this.data.observacionDocumental == 0 ? this.data.observacionDocumental = false : this.data.observacionDocumental = true;
                 this.data.replicable == 0 ? this.data.replicable = false : this.data.replicable = true;
+
             },
             afterUpdate(){
                 axios.get('api/get/evaluacion/info/' + this.data.id).then(r => {
-                    //this.data = r.data;
-                    //console.log(this.data);
-                    //console.log(r.data);
-                    this.data.cumplimiento = r.data[0].get_cumplimientos;
-
-                    console.log(this.data);
+                    this.data.get_cumplimientos = r.data[0].get_cumplimientos;
                 }).catch(e => {
                     console.log(e);
-                })
+                });
             },
             assignInput(type){
                 this.data.tipo = type;
@@ -513,6 +600,7 @@
                     }
                 });
 
+
             },
             handleEdit(row, item){
 
@@ -547,6 +635,15 @@
                     this.afterUpdate();
                 }).catch(e => {
                     this.error(e);
+                })
+            },
+
+            saveEvaluacion(){
+                axios.put('api/update/evaluacion', this.data).then(r => {
+                    console.log(r.data);
+                    this.success()
+                }).catch(e => {
+                    this.error(e)
                 })
             },
             success(){
