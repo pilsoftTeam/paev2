@@ -46,4 +46,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/create/agrupacion', 'AgrupacionesController@create');
     Route::put('/edit/agrupacion', 'AgrupacionesController@edit');
     Route::delete('/delete/agrupacion/{id}', 'AgrupacionesController@delete');
+
+
+    //Supervisor
+    Route::get('/get/supervision/revisores', 'SupervisorController@getRevisores');
+    Route::get('/get/supervision/proveedores', 'SupervisorController@getProveedores');
+
 });
