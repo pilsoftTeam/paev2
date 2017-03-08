@@ -68282,10 +68282,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = {
     mounted: function mounted() {
         this.init();
+        this.getChecklists();
     },
     data: function data() {
+        var self = this;
         return {
             selectedItem: '',
+            checklists: '',
             assignChecklistToBodega: false,
             editChecklistToBodega: false,
             removeChecklistToBodega: false,
@@ -68317,9 +68320,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 icon: 'fa fa-plus-circle',
                 class: 'btn-info btn-sm',
                 event: function event(e, row) {
-                    console.log(e);
-                    console.log(row);
-                    this.assignChecklistToBodega = true;
+                    self.initAssign(row);
                 }
             }, {
                 text: 'Editar Checklists asignado',
@@ -68354,6 +68355,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
                 _this.information.data = r.data.data;
                 _this.information.pagination = r.data;
+            }).catch(function (e) {
+                console.log(e);
+            });
+        },
+        getChecklists: function getChecklists() {
+
+            axios.get('api/get/checklists').then(function (r) {
+                console.log(r);
             }).catch(function (e) {
                 console.log(e);
             });

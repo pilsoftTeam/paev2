@@ -73,10 +73,13 @@
     export default {
         mounted(){
             this.init();
+            this.getChecklists();
         },
         data () {
+            let self = this;
             return {
                 selectedItem: '',
+                checklists: '',
                 assignChecklistToBodega: false,
                 editChecklistToBodega: false,
                 removeChecklistToBodega: false,
@@ -117,10 +120,7 @@
                         icon: 'fa fa-plus-circle',
                         class: 'btn-info btn-sm',
                         event(e, row) {
-                            console.log(e);
-                            console.log(row);
-                            this.assignChecklistToBodega = true;
-
+                            self.initAssign(row);
                         }
                     },
                     {
@@ -159,6 +159,15 @@
                 }).catch(e => {
                     console.log(e);
                 })
+            },
+            getChecklists(){
+
+                axios.get('api/get/checklists').then(r => {
+                    console.log(r);
+                }).catch(e => {
+                    console.log(e)
+                })
+
             },
             changePage(values){
                 axios.get('api/admin/get/bodegas/' + values.perpage + '?page=' + values.page).then(r => {
