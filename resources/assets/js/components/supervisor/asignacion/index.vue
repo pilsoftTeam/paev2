@@ -4,26 +4,69 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label>Proveedores</label>
-                    <el-select v-model="value" clearable placeholder="Seleccionar" style="width: 99%">
+                    <el-select v-model="asignacion.idBodega"
+                               @change="getInfo"
+                               clearable
+                               placeholder="Seleccionar"
+                               style="width: 99%">
                         <el-option
                                 v-for="item in filteredProveedores"
                                 :key="item.id"
                                 :label="item.nombreProveedor"
-                                :value="item.id">
+                                :value="item.nombreProveedor">
                         </el-option>
                     </el-select>
                 </div>
             </div>
             <br>
+
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <label>Proveedores seleccionados</label>
+                    <el-select clearable
+                               placeholder="Seleccionar"
+                               style="width: 99%">
+                        <el-option
+                                v-for="item in selectedProveedores"
+                                :key="item.id"
+                                :label="item.nombreProveedor"
+                                :value="item.id">
+                            <span style="float: left; font-size: 12px; word-wrap: break-word">
+                                {{ item.nombreProveedor }}  --
+                                Direccion : {{ item.direccionBodega }}  --
+                                Comuna : {{item.comuna}}  --
+                                Region : {{item.region}}
+                                &nbsp;
+                                &nbsp;
+                                &nbsp;
+                            </span>
+                            <span style="float: right; color: #8492a6; font-size: 12px">
+                                Licitacion : {{ item.licitacion }}
+                            </span>
+                        </el-option>
+                    </el-select>
+                </div>
+            </div>
+            <br>
+
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                </div>
+            </div>
+
+
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label>Revisores</label>
-                    <el-select v-model="value" clearable placeholder="Seleccionar" style="width: 99%">
+                    <el-select v-model="asignacion.idRevisor" clearable placeholder="Seleccionar" style="width: 99%">
                         <el-option
-                                v-for="item in options"
+                                v-for="item in revisores"
                                 :key="item.id"
-                                :label="item.label"
-                                :value="item.value">
+                                :label="item.name"
+                                :value="item.id">
                         </el-option>
                     </el-select>
                 </div>
@@ -50,26 +93,13 @@
                 value: '',
                 proveedores: '',
                 filteredProveedores: '',
-                selectedProveedor: '',
-                revisores: '',
-                options: [
-                    {
-                        value: 'Option1',
-                        label: 'Option1'
-                    }, {
-                        value: 'Option2',
-                        label: 'Option2'
-                    }, {
-                        value: 'Option3',
-                        label: 'Option3'
-                    }, {
-                        value: 'Option4',
-                        label: 'Option4'
-                    }, {
-                        value: 'Option5',
-                        label: 'Option5'
-                    }
-                ],
+                selectedProveedores: '',
+                revisores: [],
+                asignacion: {
+                    idChecklist: '',
+                    idRevisor: '',
+                    idBodega: ''
+                }
             }
         },
         methods: {
@@ -83,10 +113,22 @@
             },
             getRevisores(){
                 axios.get('api/get/supervision/revisores').then(r => {
-                    console.log(r.data)
+                    _.forEach(r.data, d => {
+                        _.forEach(d.get_users, u => {
+                            this.revisores.push(u);
+                        })
+                    })
                 }).catch(e => {
                     console.log(e)
                 })
+            },
+            getInfo(value){
+                this.selectedProveedores = _.filter(this.proveedores, p => {
+                    return p.nombreProveedor === value;
+                });
+            },
+            getChecklists(){
+
             }
         }
     }

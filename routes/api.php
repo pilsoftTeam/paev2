@@ -41,6 +41,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('/update/evaluacion', 'EvaluacionesController@editEvaluacionFromEditor');
     Route::delete('/delete/cumplimiento/{id}', 'EvaluacionesController@deleteCumplimiento');
 
+    //Bodegas...Admin
+
+    Route::get('/admin/get/bodegas/{size}', 'BodegasController@getBodegas');
+    Route::get('/admin/get/bodegas/search/{search}', 'BodegasController@getBodegasBySearch');
+
 
     //Agrupaciones
     Route::post('/create/agrupacion', 'AgrupacionesController@create');

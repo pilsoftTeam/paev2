@@ -15,6 +15,8 @@ class CreateBodegasTable extends Migration
     {
         Schema::create('bodegas', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('idChecklist')->nullable();
+            $table->foreign('idChecklist')->references('id')->on('checklists');
             $table->longText('licitacion');
             $table->longText('nombreProveedor');
             $table->longText('region');
