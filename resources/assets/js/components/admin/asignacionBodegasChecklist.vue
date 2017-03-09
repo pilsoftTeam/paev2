@@ -13,55 +13,58 @@
             </div>
         </div>
 
-        <el-dialog title="Tips" v-model="assignChecklistToBodega" size="small">
+        <el-dialog title="Asignar Checklist" v-model="assignChecklistToBodega" size="small">
 
 
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis eius eveniet facere in
-                    necessitatibus perspiciatis placeat sed sunt ullam ut. Deserunt laborum odit provident, quae quis
-                    reprehenderit ut! Beatae, perspiciatis.
+                    <el-select v-model="selectedItems.idChecklist" style="width: 99%"
+                               placeholder="Seleccione un checklist">
+                        <el-option
+                                v-for="item in checklists"
+                                :key="item.id"
+                                :label="item.nombre"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
                 </div>
             </div>
 
-
             <span slot="footer" class="dialog-footer">
-                <el-button @click="assignChecklistToBodega = false">Cancel</el-button>
-                <el-button type="primary" @click="assignChecklistToBodega = false">Confirm</el-button>
+                <el-button @click="assignChecklistToBodega = false">Cancelar</el-button>
+                <el-button type="primary" @click="saveChecklist">Guardar</el-button>
           </span>
         </el-dialog>
-        <el-dialog title="Tips" v-model="editChecklistToBodega" size="small">
-
-
+        <el-dialog title="Editar checklist" v-model="editChecklistToBodega" size="small">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis eius eveniet facere in
-                    necessitatibus perspiciatis placeat sed sunt ullam ut. Deserunt laborum odit provident, quae quis
-                    reprehenderit ut! Beatae, perspiciatis.
+                    <el-select v-model="selectedItems.idChecklist" style="width: 99%"
+                               placeholder="Seleccione un checklist">
+                        <el-option
+                                v-for="item in checklists"
+                                :key="item.id"
+                                :label="item.nombre"
+                                :value="item.id">
+                        </el-option>
+                    </el-select>
                 </div>
             </div>
-
-
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editChecklistToBodega = false">Cancel</el-button>
-                <el-button type="primary" @click="editChecklistToBodega = false">Confirm</el-button>
+                <el-button @click="editChecklistToBodega = false">Cancelar</el-button>
+                <el-button type="primary" @click="saveChecklist">Guardar</el-button>
           </span>
         </el-dialog>
-        <el-dialog title="Tips" v-model="removeChecklistToBodega" size="tiny">
 
 
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis eius eveniet facere in
-                    necessitatibus perspiciatis placeat sed sunt ullam ut. Deserunt laborum odit provident, quae quis
-                    reprehenderit ut! Beatae, perspiciatis.
-                </div>
-            </div>
+        <el-dialog title="Remover checklist de bodega" v-model="removeChecklistToBodega" size="tiny">
+
+            <h4>Atencion</h4>
+            <p>¿ Esta seguro que desea remover el checklist asignado ?</p>
 
 
             <span slot="footer" class="dialog-footer">
-                <el-button @click="removeChecklistToBodega = false">Cancel</el-button>
-                <el-button type="primary" @click="removeChecklistToBodega = false">Confirm</el-button>
+                <el-button @click="removeChecklistToBodega = false">Cancelar</el-button>
+                <el-button type="danger" @click="deleteAssignment">Remover</el-button>
           </span>
         </el-dialog>
 
@@ -78,7 +81,10 @@
         data () {
             let self = this;
             return {
-                selectedItem: '',
+                selectedItems: {
+                    idBodega: '',
+                    idChecklist: ''
+                },
                 checklists: '',
                 assignChecklistToBodega: false,
                 editChecklistToBodega: false,
@@ -120,7 +126,10 @@
                         icon: 'fa fa-plus-circle',
                         class: 'btn-info btn-sm',
                         event(e, row) {
-                            self.initAssign(row);
+                            if (row) {
+                                self.initAssign(row);
+                            }
+
                         }
                     },
                     {
@@ -128,7 +137,12 @@
                         icon: 'fa fa-pencil',
                         class: 'btn-warning btn-sm',
                         event(e, row) {
-                            console.log('Click row: ', row);
+                            if (row.row.idChecklist) {
+                                self.editAssign(row);
+                            } else {
+                                self.warning('Esta bodega aun no tiene un checklist asignado.  No se puede editar');
+                            }
+
                         }
                     },
                     {
@@ -136,7 +150,11 @@
                         icon: 'fa fa-times',
                         class: 'btn-danger btn-sm',
                         event(e, row) {
-                            console.log('Click row: ', row);
+                            if (row.row.idChecklist) {
+                                self.removeAssign(row);
+                            } else {
+                                self.warning('Esta bodega aun no tiene un checklist asignado.  No se puede remover la asignacion');
+                            }
                         }
                     },
                 ],
@@ -163,7 +181,7 @@
             getChecklists(){
 
                 axios.get('api/get/checklists').then(r => {
-                    console.log(r);
+                    this.checklists = r.data;
                 }).catch(e => {
                     console.log(e)
                 })
@@ -204,11 +222,64 @@
                 }
 
             },
-
             initAssign(row){
-                this.selectedItem = row.row.id;
+                this.selectedItems.idBodega = row.row.id;
                 this.assignChecklistToBodega = true;
+            },
+            editAssign(row){
+                this.selectedItems.idBodega = row.row.id;
+                this.selectedItems.idChecklist = row.row.idChecklist;
+                this.editChecklistToBodega = true;
+            },
+            removeAssign(row){
+                this.selectedItems.idBodega = row.row.id;
+                this.removeChecklistToBodega = true;
+            },
+
+            saveChecklist(){
+                axios.put('api/assign/checklist', this.selectedItems).then(r => {
+                    this.assignChecklistToBodega = false;
+                    this.editChecklistToBodega = false;
+                    this.success();
+                    this.init();
+                }).catch(e => {
+                    this.error(e);
+                })
+            },
+            deleteAssignment(){
+                axios.put('api/delete/assignment', this.selectedItems).then(r => {
+                    this.removeChecklistToBodega = false;
+                    this.success();
+                    this.init();
+                }).catch(e => {
+                    this.error(e);
+                })
+            },
+
+
+            success(){
+                this.$notify({
+                    title: 'Exito',
+                    message: 'La operacion se ha completado con exito',
+                    type: 'success'
+                });
+            },
+            error(error){
+                this.$notify({
+                    title: 'Error',
+                    message: 'Error : ' + error,
+                    type: 'error'
+                });
+            },
+            warning(message){
+                this.$notify({
+                    title: 'Atención',
+                    message: message,
+                    type: 'warning'
+                });
             }
+
+
         },
         components: {
             'data-source': dataSource

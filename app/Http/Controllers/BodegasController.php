@@ -25,4 +25,20 @@ class BodegasController extends Controller
             ->paginate();
         return response()->json($bodegas, 200);
     }
+
+    public function assignBodega(Request $request)
+    {
+        Bodegas::where('id', $request->idBodega)->update([
+            'idChecklist' => $request->idChecklist
+        ]);
+        return response()->json(200);
+    }
+
+    public function deleteAssignmentBodega(Request $request)
+    {
+        Bodegas::where('id', $request->idBodega)->update([
+            'idChecklist' => null
+        ]);
+        return response()->json(200);
+    }
 }

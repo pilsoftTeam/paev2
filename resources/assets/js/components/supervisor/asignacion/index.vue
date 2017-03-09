@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label>Proveedores</label>
-                    <el-select v-model="asignacion.idBodega"
+                    <el-select v-model="selectedProveedor"
                                @change="getInfo"
                                clearable
                                placeholder="Seleccionar"
@@ -25,6 +25,8 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label>Proveedores seleccionados</label>
                     <el-select clearable
+                               @change="showSelectedBodega"
+                               v-model="asignacion.idBodega"
                                placeholder="Seleccionar"
                                style="width: 99%">
                         <el-option
@@ -61,7 +63,9 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label>Revisores</label>
-                    <el-select v-model="asignacion.idRevisor" clearable placeholder="Seleccionar" style="width: 99%">
+                    <el-select v-model="asignacion.idRevisor"
+                               @change="showSelectedRevisor"
+                               placeholder="Seleccionar" style="width: 99%">
                         <el-option
                                 v-for="item in revisores"
                                 :key="item.id"
@@ -75,9 +79,52 @@
         <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    Panel body ...
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th>Nombre proveedor</th>
+                            <th>Licitacion</th>
+                            <th>Direccion</th>
+                            <th>Comuna</th>
+                            <th>Region</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{selectedProveedorPlaceholder.nombreProveedor}}</td>
+                            <td>{{selectedProveedorPlaceholder.licitacion}}</td>
+                            <td>{{selectedProveedorPlaceholder.direccionBodega}}</td>
+                            <td>{{selectedProveedorPlaceholder.comuna}}</td>
+                            <td>{{selectedProveedorPlaceholder.region}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p v-if="selectedProveedorPlaceholder.get_checklist_name">
+                        Checklist :
+                        <br>
+                        <b>{{selectedProveedorPlaceholder.get_checklist_name.nombre}}</b>
+                    </p>
+                    <p v-else>Checklist :
+                        <br>
+                        <b>Aun no hay un checklist asignado a esta bodega</b></p>
+                    <hr>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <h4 class="text-center">Datos de Revisor</h4>
+
+                            <pre>{{selectedRevisorPlaceholder}}</pre>
+
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <h4 class="text-center">Asignaciones de revisor</h4>
+
+                        </div>
+                    </div>
                 </div>
+                <br>
             </div>
+            <el-button type="success" :disabled="disabledButton" class="btn-block">Asignar checklist</el-button>
         </div>
     </div>
 </template>
@@ -95,11 +142,17 @@
                 filteredProveedores: '',
                 selectedProveedores: '',
                 revisores: [],
+
+                selectedProveedor: '',
+                selectedProveedorPlaceholder: '',
+
+                selectedRevisorPlaceholder: '',
+
                 asignacion: {
-                    idChecklist: '',
                     idRevisor: '',
                     idBodega: ''
-                }
+                },
+                disabledButton: true,
             }
         },
         methods: {
@@ -127,8 +180,16 @@
                     return p.nombreProveedor === value;
                 });
             },
-            getChecklists(){
-
+            showSelectedBodega(data){
+                this.selectedProveedorPlaceholder = _.find(this.proveedores, p => {
+                    return p.id == data;
+                });
+            },
+            showSelectedRevisor(data){
+                //console.log(data);
+                this.selectedRevisorPlaceholder = _.find(this.revisores, r => {
+                    return r.id == data;
+                })
             }
         }
     }

@@ -68277,6 +68277,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
@@ -68287,7 +68290,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         var self = this;
         return {
-            selectedItem: '',
+            selectedItems: {
+                idBodega: '',
+                idChecklist: ''
+            },
             checklists: '',
             assignChecklistToBodega: false,
             editChecklistToBodega: false,
@@ -68320,21 +68326,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 icon: 'fa fa-plus-circle',
                 class: 'btn-info btn-sm',
                 event: function event(e, row) {
-                    self.initAssign(row);
+                    if (row) {
+                        self.initAssign(row);
+                    }
                 }
             }, {
                 text: 'Editar Checklists asignado',
                 icon: 'fa fa-pencil',
                 class: 'btn-warning btn-sm',
                 event: function event(e, row) {
-                    console.log('Click row: ', row);
+                    if (row.row.idChecklist) {
+                        self.editAssign(row);
+                    } else {
+                        self.warning('Esta bodega aun no tiene un checklist asignado.  No se puede editar');
+                    }
                 }
             }, {
                 text: 'Remover checklist',
                 icon: 'fa fa-times',
                 class: 'btn-danger btn-sm',
                 event: function event(e, row) {
-                    console.log('Click row: ', row);
+                    if (row.row.idChecklist) {
+                        self.removeAssign(row);
+                    } else {
+                        self.warning('Esta bodega aun no tiene un checklist asignado.  No se puede remover la asignacion');
+                    }
                 }
             }]
 
@@ -68360,15 +68376,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         getChecklists: function getChecklists() {
+            var _this2 = this;
 
             axios.get('api/get/checklists').then(function (r) {
-                console.log(r);
+                _this2.checklists = r.data;
             }).catch(function (e) {
                 console.log(e);
             });
         },
         changePage: function changePage(values) {
-            var _this2 = this;
+            var _this3 = this;
 
             axios.get('api/admin/get/bodegas/' + values.perpage + '?page=' + values.page).then(function (r) {
                 _.forEach(r.data.data, function (d) {
@@ -68378,14 +68395,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         };
                     }
                 });
-                _this2.information.data = r.data.data;
-                _this2.information.pagination = r.data;
+                _this3.information.data = r.data.data;
+                _this3.information.pagination = r.data;
             }).catch(function (e) {
                 console.log(e);
             });
         },
         onSearch: function onSearch(searchQuery) {
-            var _this3 = this;
+            var _this4 = this;
 
             if (searchQuery) {
                 axios.get('api/admin/get/bodegas/search/' + searchQuery).then(function (r) {
@@ -68396,8 +68413,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             };
                         }
                     });
-                    _this3.information.data = r.data.data;
-                    _this3.information.pagination = r.data;
+                    _this4.information.data = r.data.data;
+                    _this4.information.pagination = r.data;
                 }).catch(function (e) {
                     console.log(e);
                 });
@@ -68406,8 +68423,61 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         initAssign: function initAssign(row) {
-            this.selectedItem = row.row.id;
+            this.selectedItems.idBodega = row.row.id;
             this.assignChecklistToBodega = true;
+        },
+        editAssign: function editAssign(row) {
+            this.selectedItems.idBodega = row.row.id;
+            this.selectedItems.idChecklist = row.row.idChecklist;
+            this.editChecklistToBodega = true;
+        },
+        removeAssign: function removeAssign(row) {
+            this.selectedItems.idBodega = row.row.id;
+            this.removeChecklistToBodega = true;
+        },
+        saveChecklist: function saveChecklist() {
+            var _this5 = this;
+
+            axios.put('api/assign/checklist', this.selectedItems).then(function (r) {
+                _this5.assignChecklistToBodega = false;
+                _this5.editChecklistToBodega = false;
+                _this5.success();
+                _this5.init();
+            }).catch(function (e) {
+                _this5.error(e);
+            });
+        },
+        deleteAssignment: function deleteAssignment() {
+            var _this6 = this;
+
+            axios.put('api/delete/assignment', this.selectedItems).then(function (r) {
+                _this6.removeChecklistToBodega = false;
+                _this6.success();
+                _this6.init();
+            }).catch(function (e) {
+                _this6.error(e);
+            });
+        },
+        success: function success() {
+            this.$notify({
+                title: 'Exito',
+                message: 'La operacion se ha completado con exito',
+                type: 'success'
+            });
+        },
+        error: function error(_error) {
+            this.$notify({
+                title: 'Error',
+                message: 'Error : ' + _error,
+                type: 'error'
+            });
+        },
+        warning: function warning(message) {
+            this.$notify({
+                title: 'Atención',
+                message: message,
+                type: 'warning'
+            });
         }
     },
     components: {
@@ -70227,6 +70297,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = {
@@ -70241,11 +70358,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             filteredProveedores: '',
             selectedProveedores: '',
             revisores: [],
+
+            selectedProveedor: '',
+            selectedProveedorPlaceholder: '',
+
+            selectedRevisorPlaceholder: '',
+
             asignacion: {
-                idChecklist: '',
                 idRevisor: '',
                 idBodega: ''
-            }
+            },
+            disabledButton: true
         };
     },
 
@@ -70278,7 +70401,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return p.nombreProveedor === value;
             });
         },
-        getChecklists: function getChecklists() {}
+        showSelectedBodega: function showSelectedBodega(data) {
+            this.selectedProveedorPlaceholder = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.find(this.proveedores, function (p) {
+                return p.id == data;
+            });
+        },
+        showSelectedRevisor: function showSelectedRevisor(data) {
+            //console.log(data);
+            this.selectedRevisorPlaceholder = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.find(this.revisores, function (r) {
+                return r.id == data;
+            });
+        }
     }
 };
 
@@ -82536,7 +82669,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   })], 1)]), _vm._v(" "), _c('el-dialog', {
     attrs: {
-      "title": "Tips",
+      "title": "Asignar Checklist",
       "size": "small"
     },
     model: {
@@ -82549,7 +82682,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-xs-12 col-sm-12 col-md-12 col-lg-12"
-  }, [_vm._v("\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis eius eveniet facere in\n                necessitatibus perspiciatis placeat sed sunt ullam ut. Deserunt laborum odit provident, quae quis\n                reprehenderit ut! Beatae, perspiciatis.\n            ")])]), _vm._v(" "), _c('span', {
+  }, [_c('el-select', {
+    staticStyle: {
+      "width": "99%"
+    },
+    attrs: {
+      "placeholder": "Seleccione un checklist"
+    },
+    model: {
+      value: (_vm.selectedItems.idChecklist),
+      callback: function($$v) {
+        _vm.selectedItems.idChecklist = $$v
+      }
+    }
+  }, _vm._l((_vm.checklists), function(item) {
+    return _c('el-option', {
+      key: item.id,
+      attrs: {
+        "label": item.nombre,
+        "value": item.id
+      }
+    })
+  }))], 1)]), _vm._v(" "), _c('span', {
     staticClass: "dialog-footer",
     slot: "footer"
   }, [_c('el-button', {
@@ -82558,18 +82712,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.assignChecklistToBodega = false
       }
     }
-  }, [_vm._v("Cancel")]), _vm._v(" "), _c('el-button', {
+  }, [_vm._v("Cancelar")]), _vm._v(" "), _c('el-button', {
     attrs: {
       "type": "primary"
     },
     on: {
-      "click": function($event) {
-        _vm.assignChecklistToBodega = false
-      }
+      "click": _vm.saveChecklist
     }
-  }, [_vm._v("Confirm")])], 1)]), _vm._v(" "), _c('el-dialog', {
+  }, [_vm._v("Guardar")])], 1)]), _vm._v(" "), _c('el-dialog', {
     attrs: {
-      "title": "Tips",
+      "title": "Editar checklist",
       "size": "small"
     },
     model: {
@@ -82582,7 +82734,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "row"
   }, [_c('div', {
     staticClass: "col-xs-12 col-sm-12 col-md-12 col-lg-12"
-  }, [_vm._v("\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis eius eveniet facere in\n                necessitatibus perspiciatis placeat sed sunt ullam ut. Deserunt laborum odit provident, quae quis\n                reprehenderit ut! Beatae, perspiciatis.\n            ")])]), _vm._v(" "), _c('span', {
+  }, [_c('el-select', {
+    staticStyle: {
+      "width": "99%"
+    },
+    attrs: {
+      "placeholder": "Seleccione un checklist"
+    },
+    model: {
+      value: (_vm.selectedItems.idChecklist),
+      callback: function($$v) {
+        _vm.selectedItems.idChecklist = $$v
+      }
+    }
+  }, _vm._l((_vm.checklists), function(item) {
+    return _c('el-option', {
+      key: item.id,
+      attrs: {
+        "label": item.nombre,
+        "value": item.id
+      }
+    })
+  }))], 1)]), _vm._v(" "), _c('span', {
     staticClass: "dialog-footer",
     slot: "footer"
   }, [_c('el-button', {
@@ -82591,18 +82764,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.editChecklistToBodega = false
       }
     }
-  }, [_vm._v("Cancel")]), _vm._v(" "), _c('el-button', {
+  }, [_vm._v("Cancelar")]), _vm._v(" "), _c('el-button', {
     attrs: {
       "type": "primary"
     },
     on: {
-      "click": function($event) {
-        _vm.editChecklistToBodega = false
-      }
+      "click": _vm.saveChecklist
     }
-  }, [_vm._v("Confirm")])], 1)]), _vm._v(" "), _c('el-dialog', {
+  }, [_vm._v("Guardar")])], 1)]), _vm._v(" "), _c('el-dialog', {
     attrs: {
-      "title": "Tips",
+      "title": "Remover checklist de bodega",
       "size": "tiny"
     },
     model: {
@@ -82611,11 +82782,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.removeChecklistToBodega = $$v
       }
     }
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-xs-12 col-sm-12 col-md-12 col-lg-12"
-  }, [_vm._v("\n                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis eius eveniet facere in\n                necessitatibus perspiciatis placeat sed sunt ullam ut. Deserunt laborum odit provident, quae quis\n                reprehenderit ut! Beatae, perspiciatis.\n            ")])]), _vm._v(" "), _c('span', {
+  }, [_c('h4', [_vm._v("Atencion")]), _vm._v(" "), _c('p', [_vm._v("¿ Esta seguro que desea remover el checklist asignado ?")]), _vm._v(" "), _c('span', {
     staticClass: "dialog-footer",
     slot: "footer"
   }, [_c('el-button', {
@@ -82624,16 +82791,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.removeChecklistToBodega = false
       }
     }
-  }, [_vm._v("Cancel")]), _vm._v(" "), _c('el-button', {
+  }, [_vm._v("Cancelar")]), _vm._v(" "), _c('el-button', {
     attrs: {
-      "type": "primary"
+      "type": "danger"
     },
     on: {
-      "click": function($event) {
-        _vm.removeChecklistToBodega = false
-      }
+      "click": _vm.deleteAssignment
     }
-  }, [_vm._v("Confirm")])], 1)])], 1)
+  }, [_vm._v("Remover")])], 1)])], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
@@ -83484,9 +83649,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "change": _vm.getInfo
     },
     model: {
-      value: (_vm.asignacion.idBodega),
+      value: (_vm.selectedProveedor),
       callback: function($$v) {
-        _vm.asignacion.idBodega = $$v
+        _vm.selectedProveedor = $$v
       }
     }
   }, _vm._l((_vm.filteredProveedores), function(item) {
@@ -83508,6 +83673,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "clearable": "",
       "placeholder": "Seleccionar"
+    },
+    on: {
+      "change": _vm.showSelectedBodega
+    },
+    model: {
+      value: (_vm.asignacion.idBodega),
+      callback: function($$v) {
+        _vm.asignacion.idBodega = $$v
+      }
     }
   }, _vm._l((_vm.selectedProveedores), function(item) {
     return _c('el-option', {
@@ -83538,8 +83712,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "width": "99%"
     },
     attrs: {
-      "clearable": "",
       "placeholder": "Seleccionar"
+    },
+    on: {
+      "change": _vm.showSelectedRevisor
     },
     model: {
       value: (_vm.asignacion.idRevisor),
@@ -83555,7 +83731,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": item.id
       }
     })
-  }))], 1)])]), _vm._v(" "), _vm._m(1)])
+  }))], 1)])]), _vm._v(" "), _c('div', {
+    staticClass: "col-xs-9 col-sm-9 col-md-9 col-lg-9"
+  }, [_c('div', {
+    staticClass: "panel panel-default"
+  }, [_c('div', {
+    staticClass: "panel-body"
+  }, [_c('table', {
+    staticClass: "table table-condensed table-hover"
+  }, [_vm._m(1), _vm._v(" "), _c('tbody', [_c('tr', [_c('td', [_vm._v(_vm._s(_vm.selectedProveedorPlaceholder.nombreProveedor))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.selectedProveedorPlaceholder.licitacion))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.selectedProveedorPlaceholder.direccionBodega))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.selectedProveedorPlaceholder.comuna))]), _vm._v(" "), _c('td', [_vm._v(_vm._s(_vm.selectedProveedorPlaceholder.region))])])])]), _vm._v(" "), (_vm.selectedProveedorPlaceholder.get_checklist_name) ? _c('p', [_vm._v("\n                    Checklist :\n                    "), _c('br'), _vm._v(" "), _c('b', [_vm._v(_vm._s(_vm.selectedProveedorPlaceholder.get_checklist_name.nombre))])]) : _c('p', [_vm._v("Checklist :\n                    "), _c('br'), _vm._v(" "), _c('b', [_vm._v("Aun no hay un checklist asignado a esta bodega")])]), _vm._v(" "), _c('hr'), _vm._v(" "), _c('br'), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6"
+  }, [_c('h4', {
+    staticClass: "text-center"
+  }, [_vm._v("Datos de Revisor")]), _vm._v(" "), _c('pre', [_vm._v(_vm._s(_vm.selectedRevisorPlaceholder))])]), _vm._v(" "), _vm._m(2)])]), _vm._v(" "), _c('br')]), _vm._v(" "), _c('el-button', {
+    staticClass: "btn-block",
+    attrs: {
+      "type": "success",
+      "disabled": _vm.disabledButton
+    }
+  }, [_vm._v("Asignar checklist")])], 1)])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "row"
@@ -83563,13 +83759,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "col-xs-12 col-sm-12 col-md-12 col-lg-12"
   })])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('thead', [_c('tr', [_c('th', [_vm._v("Nombre proveedor")]), _vm._v(" "), _c('th', [_vm._v("Licitacion")]), _vm._v(" "), _c('th', [_vm._v("Direccion")]), _vm._v(" "), _c('th', [_vm._v("Comuna")]), _vm._v(" "), _c('th', [_vm._v("Region")])])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "col-xs-9 col-sm-9 col-md-9 col-lg-9"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-body"
-  }, [_vm._v("\n                Panel body ...\n            ")])])])
+    staticClass: "col-xs-6 col-sm-6 col-md-6 col-lg-6"
+  }, [_c('h4', {
+    staticClass: "text-center"
+  }, [_vm._v("Asignaciones de revisor")])])
 }]}
 module.exports.render._withStripped = true
 if (false) {

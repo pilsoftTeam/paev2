@@ -16,7 +16,7 @@ class SupervisorController extends Controller
 
     public function getProveedores()
     {
-        $bodegas = Bodegas::orderBy('nombreProveedor', 'asc')->get();
+        $bodegas = Bodegas::orderBy('nombreProveedor', 'asc')->with('getChecklistName')->get();
         return response()->json($bodegas, 200);
     }
 }

@@ -45,6 +45,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::get('/admin/get/bodegas/{size}', 'BodegasController@getBodegas');
     Route::get('/admin/get/bodegas/search/{search}', 'BodegasController@getBodegasBySearch');
+    Route::put('/assign/checklist', 'BodegasController@assignBodega');
+    Route::put('/delete/assignment', 'BodegasController@deleteAssignmentBodega');
 
 
     //Agrupaciones
