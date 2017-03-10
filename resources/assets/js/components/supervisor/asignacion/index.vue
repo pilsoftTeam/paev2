@@ -78,7 +78,7 @@
         </div>
         <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
             <div class="panel panel-default">
-                <div class="panel-body">
+                <div v-if="!selectedProveedorPlaceholder.get_asignacion" class="panel-body">
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
@@ -112,19 +112,53 @@
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <h4 class="text-center">Datos de Revisor</h4>
-
-                            <pre>{{selectedRevisorPlaceholder}}</pre>
-
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    Nombre : <b>{{selectedRevisorPlaceholder.name}}</b>
+                                </li>
+                                <li class="list-group-item">
+                                    E-mail : <b>{{selectedRevisorPlaceholder.email}}</b>
+                                </li>
+                            </ul>
                         </div>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <h4 class="text-center">Asignaciones de revisor</h4>
 
                         </div>
                     </div>
+                    <el-button type="success"
+                               @click="saveAsignacion"
+                               :disabled="disabledButton"
+                               class="btn-block">
+                        Asignar checklist
+                    </el-button>
+                </div>
+                <div class="panel-body" v-else>
+                    <h4 class="text-center text-warning">Esta bodega ya ha sido asignada</h4>
+
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Revisor</th>
+                            <th class="text-center">Supervisor</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Fecha de asignación</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-center">
+                            <td>{{selectedProveedorPlaceholder.get_asignacion.get_revisor.name}}</td>
+                            <td>{{selectedProveedorPlaceholder.get_asignacion.get_supervisor.name}}</td>
+                            <td style="text-transform: capitalize">
+                                {{selectedProveedorPlaceholder.get_asignacion.estado}}
+                            </td>
+                            <td>{{selectedProveedorPlaceholder.get_asignacion.created_at}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <br>
             </div>
-            <el-button type="success" :disabled="disabledButton" class="btn-block">Asignar checklist</el-button>
         </div>
     </div>
 </template>
@@ -151,8 +185,7 @@
                 asignacion: {
                     idRevisor: '',
                     idBodega: ''
-                },
-                disabledButton: true,
+                }
             }
         },
         methods: {
@@ -190,7 +223,39 @@
                 this.selectedRevisorPlaceholder = _.find(this.revisores, r => {
                     return r.id == data;
                 })
+            },
+
+            saveAsignacion(){
+                axios.post('api/save/asignacion', this.asignacion).then(r => {
+                    this.success();
+                    console.log(r.data);
+                }).catch(e => {
+                    this.error(e);
+                });
+            },
+
+            success(){
+                this.$notify({
+                    title: 'Exito',
+                    message: 'La operacion se ha completado con exito',
+                    type: 'success'
+                });
+            },
+            error(error){
+                this.$notify({
+                    title: 'Error',
+                    message: 'Error : ' + error,
+                    type: 'error'
+                });
+            }
+
+
+        },
+        computed: {
+            disabledButton(){
+                return !(this.asignacion.idBodega && this.asignacion.idRevisor);
             }
         }
+
     }
 </script>

@@ -10,4 +10,9 @@ class Bodegas extends Model
     {
         return $this->hasOne('App\Checklists', 'id', 'idChecklist');
     }
+
+    public function getAsignacion()
+    {
+        return $this->hasOne('App\Asignaciones', 'idBodega', 'id')->with('getRevisor', 'getSupervisor');
+    }
 }

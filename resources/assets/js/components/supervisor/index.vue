@@ -9,7 +9,9 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="Confi" name="R">Config</el-tab-pane>
+                <el-tab-pane label="Asignaciones" name="asignaciones">
+                    <asignaciones-component></asignaciones-component>
+                </el-tab-pane>
                 <el-tab-pane label="Role" name="third">Role</el-tab-pane>
                 <el-tab-pane label="Task" name="fourth">Task</el-tab-pane>
             </el-tabs>
@@ -20,6 +22,7 @@
 </template>
 <script>
     import asignacionUsuarios from './asignacion/index.vue'
+    import asignaciones from './asignaciones/index.vue'
     export default {
         data () {
             return {
@@ -27,7 +30,8 @@
             }
         },
         components: {
-            'asignacion-usuarios': asignacionUsuarios
+            'asignacion-usuarios': asignacionUsuarios,
+            'asignaciones-component': asignaciones
         }
     }
 </script>

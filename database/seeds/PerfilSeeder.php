@@ -24,7 +24,6 @@ class PerfilSeeder extends Seeder
         ]);
 
 
-
         DB::table('usuarios')->insert([
             'name' => 'Admin',
             'email' => 'admin@pae.cl',
@@ -35,7 +34,6 @@ class PerfilSeeder extends Seeder
             'idRol' => 2,
             'idUsuario' => 2
         ]);
-
 
 
         DB::table('usuarios')->insert([
@@ -50,11 +48,10 @@ class PerfilSeeder extends Seeder
         ]);
 
 
-
         DB::table('usuarios')->insert([
             'name' => 'Revisor',
-            'email' => 'supervisor@pae.cl',
-            'password' => bcrypt('supervisor'),
+            'email' => 'revisor@pae.cl',
+            'password' => bcrypt('revisor'),
         ]);
 
         DB::table('perfiles')->insert([

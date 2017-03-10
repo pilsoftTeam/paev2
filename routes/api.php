@@ -48,6 +48,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('/assign/checklist', 'BodegasController@assignBodega');
     Route::put('/delete/assignment', 'BodegasController@deleteAssignmentBodega');
 
+    //Asignaciones
+    Route::get('/get/asignaciones', 'AsignacionesController@getSupervisorAsignaciones');
+    Route::post('/save/asignacion', 'AsignacionesController@save');
+
 
     //Agrupaciones
     Route::post('/create/agrupacion', 'AgrupacionesController@create');
