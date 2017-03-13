@@ -6,7 +6,6 @@
                     <label>Proveedores</label>
                     <el-select v-model="selectedProveedor"
                                @change="getInfo"
-                               clearable
                                placeholder="Seleccionar"
                                style="width: 99%">
                         <el-option
@@ -24,8 +23,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <label>Proveedores seleccionados</label>
-                    <el-select clearable
-                               @change="showSelectedBodega"
+                    <el-select @change="showSelectedBodega"
                                v-model="asignacion.idBodega"
                                placeholder="Seleccionar"
                                style="width: 99%">
@@ -51,13 +49,6 @@
                 </div>
             </div>
             <br>
-
-
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                </div>
-            </div>
 
 
             <div class="row">

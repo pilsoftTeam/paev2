@@ -22,4 +22,9 @@ class Asignaciones extends Model
     {
         return $this->hasOne('App\Bodegas', 'id', 'idBodega');
     }
+
+    public function getBodegasForEvaluaciones()
+    {
+        return $this->hasOne('App\Bodegas', 'id', 'idBodega')->with('getChecklist');
+    }
 }

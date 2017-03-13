@@ -63,4 +63,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/get/supervision/revisores', 'SupervisorController@getRevisores');
     Route::get('/get/supervision/proveedores', 'SupervisorController@getProveedores');
 
+    //Usuarios
+
+    Route::get('/traer/usuarios', 'UsuariosController@getUsers');
+
+    //Revisor
+    Route::get('/get/revisiones', 'RevisoresController@getRevisiones');
+
 });

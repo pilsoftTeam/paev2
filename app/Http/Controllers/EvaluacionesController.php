@@ -108,7 +108,8 @@ class EvaluacionesController extends Controller
             'aspectoEvaluativo' => $request->aspectoEvaluativo,
             'observacionDocumental' => $request->observacionDocumental,
             'observacionEscrita' => $request->observacionEscrita,
-            'replicable' => $request->replicable
+            'replicable' => $request->replicable,
+            'tipo' => $request->tipo
         ]);
         return response()->json(200);
     }

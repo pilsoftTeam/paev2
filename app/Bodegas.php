@@ -15,4 +15,10 @@ class Bodegas extends Model
     {
         return $this->hasOne('App\Asignaciones', 'idBodega', 'id')->with('getRevisor', 'getSupervisor');
     }
+
+    //Esta relacion es para mostrar la asignacion/revision al usuario revisor
+    public function getChecklist()
+    {
+        return $this->hasOne('App\Checklists', 'id', 'idChecklist')->with('getItems');
+    }
 }

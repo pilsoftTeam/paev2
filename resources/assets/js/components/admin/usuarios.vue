@@ -11,18 +11,14 @@
     </div>
 </template>
 <script>
+    import dataSource from 'vue-datasource'
     export default {
+        mounted(){
+            this.init();
+        },
         data () {
             let self = this;
             return {
-                selectedItems: {
-                    idBodega: '',
-                    idChecklist: ''
-                },
-                checklists: '',
-                assignChecklistToBodega: false,
-                editChecklistToBodega: false,
-                removeChecklistToBodega: false,
                 information: {
                     pagination: {},
                     data: []
@@ -44,27 +40,11 @@
                 ],
                 actions: [
                     {
-                        text: 'Asignar Checklists',
-                        icon: 'fa fa-plus-circle',
-                        class: 'btn-info btn-sm',
-                        event(e, row) {
-                            if (row) {
-                                self.initAssign(row);
-                            }
-
-                        }
-                    },
-                    {
-                        text: 'Editar Checklists asignado',
+                        text: 'Editar Usuario',
                         icon: 'fa fa-pencil',
                         class: 'btn-warning btn-sm',
                         event(e, row) {
-                            if (row.row.idChecklist) {
-                                self.editAssign(row);
-                            } else {
-                                self.warning('Esta bodega aun no tiene un checklist asignado.  No se puede editar');
-                            }
-
+                            console.log(row)
                         }
                     },
                     {
@@ -72,17 +52,46 @@
                         icon: 'fa fa-times',
                         class: 'btn-danger btn-sm',
                         event(e, row) {
-                            if (row.row.idChecklist) {
-                                self.removeAssign(row);
-                            } else {
-                                self.warning('Esta bodega aun no tiene un checklist asignado.  No se puede remover la asignacion');
-                            }
+                            console.log(row)
                         }
                     },
                 ],
 
 
             }
+        },
+        methods: {
+
+            init(){
+                axios.get('api/traer/usuarios').then(r => {
+                    console.log(r.data)
+                }).catch(e => {
+                    console.log(e)
+                })
+            },
+            changePage(e){
+
+            },
+            onSearch(e){
+
+            },
+            success(){
+                this.$notify({
+                    title: 'Exito',
+                    message: 'La operacion se ha completado con exito',
+                    type: 'success'
+                });
+            },
+            error(error){
+                this.$notify({
+                    title: 'Error',
+                    message: 'Error : ' + error,
+                    type: 'error'
+                });
+            },
+        },
+        components: {
+            'data-source': dataSource
         }
     }
 </script>

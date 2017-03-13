@@ -105,31 +105,40 @@
                                                 <li class="list-group-item">
                                                     <div v-for="evaluacion in agrupacion.get_evaluaciones">
                                                         <div class="row">
-                                                            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                                 <p style="word-wrap: break-word">
-                                                                    {{evaluacion.evaluacion}}</p>
+                                                                    <b>{{evaluacion.evaluacion}}</b>
+                                                                </p>
                                                             </div>
-                                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                                <div class="btn-group">
-                                                                    <button type="button"
-                                                                            @click="showDialogEvaluacionEdit(evaluacion)"
-                                                                            title="Editar esta evaluacion"
-                                                                            class="btn btn-warning btn-xs">
-                                                                        <i class="fa fa-pencil-square-o"
-                                                                           aria-hidden="true"></i>
-                                                                    </button>
-                                                                    <button type="button"
-                                                                            @click="showDialogEvaluacionDelete(evaluacion.id)"
-                                                                            title="Eliminar esta evaluacion"
-                                                                            class="btn btn-danger btn-xs">
-                                                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                                                    </button>
-                                                                    <button type="button"
-                                                                            @click="initCreator(evaluacion)"
-                                                                            title="Cargar evaluacion"
-                                                                            class="btn btn-success btn-xs">
-                                                                        <i class="fa fa-arrow-circle-right"></i>
-                                                                    </button>
+                                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                                <div class="btn-group btn-group-justified" role="group"
+                                                                     aria-label="Justified button group">
+                                                                    <div class="btn-group" role="group">
+                                                                        <button type="button"
+                                                                                @click="showDialogEvaluacionEdit(evaluacion)"
+                                                                                title="Editar esta evaluacion"
+                                                                                class="btn btn-default btn-info btn-xs">
+                                                                            <i class="fa fa-pencil-square-o"
+                                                                               aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="btn-group" role="group">
+                                                                        <button type="button"
+                                                                                @click="showDialogEvaluacionDelete(evaluacion.id)"
+                                                                                title="Eliminar esta evaluacion"
+                                                                                class="btn btn-default btn-xs btn-danger">
+                                                                            <i class="fa fa-trash"
+                                                                               aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="btn-group" role="group">
+                                                                        <button type="button"
+                                                                                @click="initCreator(evaluacion)"
+                                                                                title="Cargar evaluacion"
+                                                                                class="btn btn-success btn-xs">
+                                                                            <i class="fa fa-arrow-circle-right"></i>
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -147,30 +156,43 @@
                                     <hr>
                                     <div v-for="evaluacion in evaluaciones.evaluaciones">
                                         <div class="row">
-                                            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-                                                <p style="word-wrap: break-word">{{evaluacion.evaluacion}}</p>
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                <p style="word-wrap: break-word">
+                                                    <b>{{evaluacion.evaluacion}}</b>
+                                                </p>
                                             </div>
-                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <div class="btn-group">
-                                                    <button type="button"
-                                                            @click="showDialogEvaluacionEdit(evaluacion)"
-                                                            title="Editar esta evaluacion"
-                                                            class="btn btn-warning btn-xs">
-                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                    </button>
-                                                    <button type="button"
-                                                            @click="showDialogEvaluacionDelete(evaluacion.id)"
-                                                            title="Eliminar esta evaluacion"
-                                                            class="btn btn-danger btn-xs">
-                                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                                    </button>
-                                                    <button type="button"
-                                                            @click="initCreator(evaluacion)"
-                                                            title="Cargar evaluacion"
-                                                            class="btn btn-success btn-xs">
-                                                        <i class="fa fa-arrow-circle-right"></i>
-                                                    </button>
+                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+
+                                                <div class="btn-group btn-group-justified" role="group"
+                                                     aria-label="Justified button group">
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button"
+                                                                @click="showDialogEvaluacionEdit(evaluacion)"
+                                                                title="Editar esta evaluacion"
+                                                                class="btn btn-default btn-info btn-xs">
+                                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button"
+                                                                @click="showDialogEvaluacionDelete(evaluacion.id)"
+                                                                title="Eliminar esta evaluacion"
+                                                                class="btn btn-default btn-xs btn-danger">
+                                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button"
+                                                                @click="initCreator(evaluacion)"
+                                                                title="Cargar evaluacion"
+                                                                class="btn btn-success btn-xs">
+                                                            <i class="fa fa-arrow-circle-right"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
+
+
                                             </div>
                                         </div>
                                         <hr>
@@ -342,7 +364,7 @@
                 newEvaluacion: {
                     nombre: '',
                     idItem: '',
-                    idAgrupacion: '',
+                    idAgrupacion: ''
                 },
                 newAgrupacion: {
                     nombre: '',
@@ -406,7 +428,7 @@
                             message: 'El texto debe ser mas de 3 y menor de 999 caracteres',
                             trigger: 'blur'
                         }
-                    ],
+                    ]
                 }
             }
         },
@@ -563,7 +585,7 @@
                 })
             },
             showDialogEvaluacionDelete(id){
-                this.showDeleteEvaluacionDialog = true
+                this.showDeleteEvaluacionDialog = true;
                 this.selectedIdForEvaluacionDeletion = id
             },
             deleteEvaluacion(){

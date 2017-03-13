@@ -23,6 +23,7 @@ Vue.use(ElementUI);
 
 Vue.component('admin', require('./components/admin/index.vue'));
 Vue.component('supervisor', require('./components/supervisor/index.vue'));
+Vue.component('revisor', require('./components/revisor/index.vue'));
 
 const app = new Vue({
     el: '#app'

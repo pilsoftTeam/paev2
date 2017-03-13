@@ -155,16 +155,19 @@
                                                 placeholder="Elija la hora">
                                 </el-time-picker>
 
+
                                 <div class="row" v-if="data.tipo === 'seleccionUnica'">
                                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
                                         <el-select style="width: 99%" v-model="placeholders.seleccionUnica"
                                                    placeholder="Seleccionar">
-                                            <el-option
-                                                    v-for="opciones in data.get_cumplimientos.get_opciones_cumplimientos"
-                                                    :key="opciones.id"
-                                                    :value="opciones.valor"
-                                                    :label="opciones.titulo">
-                                            </el-option>
+                                            <div v-if="data.get_cumplimientos" class="isHere">
+                                                <el-option
+                                                        v-for="opciones in data.get_cumplimientos.get_opciones_cumplimientos"
+                                                        :key="opciones.id"
+                                                        :value="opciones.valor"
+                                                        :label="opciones.titulo">
+                                                </el-option>
+                                            </div>
                                         </el-select>
                                     </div>
                                     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
@@ -194,6 +197,7 @@
 
 
                                 </div>
+
 
                                 <div class="row" v-if="data.tipo === 'seleccionMultiple'">
                                     <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
@@ -255,7 +259,7 @@
                                                     <h5 class="text-center">Observacion documental</h5>
                                                     <el-upload
                                                             class="upload-demo"
-                                                            :drag="true" l
+                                                            :drag="true"
                                                             action="//jsonplaceholder.typicode.com/posts/"
                                                             :mutiple="true">
                                                         <i class="el-icon-upload"></i>
